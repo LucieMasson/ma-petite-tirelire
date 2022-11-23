@@ -1,0 +1,10 @@
+version: '2'
+services:
+  ut:
+    build:
+      context: ..
+      dockerfile: build/Dockerfile_test
+    environment:
+      - DJANGO_SETTINGS_MODULE=controller.settings
+    entrypoint: /bin/sh
+    command: -c "cd tests; pytest -vv -m ut --cov ../app/"

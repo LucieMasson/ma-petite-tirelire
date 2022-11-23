@@ -1,0 +1,25 @@
+version: '2'
+services:
+  db-test:
+    build:
+      context: ..
+      dockerfile: build/Dockerfile_db
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+
+  ft:
+    build:
+      context: ..
+      dockerfile: build/Dockerfile_test
+    environment:
+      - DB_PORT=5432
+      - DB_HOST=db-test
+      - DB_USER=test_user
+      - DB_PASSWORD=test
+      - DJANGO_SETTINGS_MODULE=controller.settings
+    env_file:
+        - ./django_secrets.env
+    depends_on:
+      - db-test
+    entrypoint: /bin/sh
+    command: -c "cd tests; pytest -m ft --cov ../app/"

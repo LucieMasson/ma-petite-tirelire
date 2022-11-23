@@ -1,24 +1,38 @@
 from rest_framework import serializers
 
 
-class TirelireCreationSerializer(serializers.Serializer):
+class PiggybankCreationSerializer(serializers.Serializer):
     name = serializers.CharField()
 
+    def create(self, validated_data):
+        pass
 
-class TirelireSerializer(serializers.Serializer):
+    def update(self, instance, validated_data):
+        pass
+
+
+class BiggybankSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField()
     broken = serializers.BooleanField()
 
+    def create(self, validated_data):
+        pass
+
+    def update(self, instance, validated_data):
+        pass
+
 
 class SavingSerializer(serializers.Serializer):
     coins = serializers.ListField(
-        child=serializers.IntegerField(), required=False, default=[]
+        child=serializers.FloatField(), required=False, default=[]
     )
     notes = serializers.ListField(
-        child=serializers.IntegerField(), required=False, default=[]
+        child=serializers.FloatField(), required=False, default=[]
     )
 
+    def create(self, validated_data):
+        pass
 
-class RichesseSerializer(serializers.Serializer):
-    montant = serializers.IntegerField()
+    def update(self, instance, validated_data):
+        pass

@@ -10,15 +10,15 @@ RUN apt-get update \
     && rm -rf /tmp/*
 
 COPY ./app/requirements.txt ./
-
 RUN pip install --no-cache-dir --upgrade -r ./requirements.txt
 
-COPY ./app .
+COPY ./tests/requirements.txt ./requirements_test.txt
+RUN pip install --no-cache-dir --upgrade -r ./requirements_test.txt
 
-WORKDIR /app
-ENV PYTHONPATH="${PYTHONPATH}:/app"
-ENV PYTHONUNBUFFERED=1
+COPY ./app ./app
+COPY ./tests ./tests
 
-EXPOSE 8000
+WORKDIR /app/tests
+ENV PYTHONPATH="${PYTHONPATH}:/app/app"
 
-CMD ["python", "controller/manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["pytest", "-m", "ut", "--cov", "../app/"]

@@ -5,47 +5,34 @@ CREATE DATABASE tirelire OWNER test_user;
 
 \c tirelire test_user
 
-CREATE TYPE monnaie_type AS ENUM ('piece', 'billet');
+CREATE TYPE change_type AS ENUM ('coin', 'note');
 
-CREATE TABLE tirelire (
+CREATE TABLE piggybank (
     id serial,
     name text,
     broken bool DEFAULT FALSE
 );
 
-CREATE TABLE monnaie (
+CREATE TABLE change (
     id serial,
-    kind monnaie_type NOT NULL,
+    kind change_type NOT NULL,
     value int NOT NULL
 );
 
-CREATE TABLE richesse (
-    tirelire_id bigint,
-    monnaie_id bigint,
-    count int DEFAULT 0
+CREATE TABLE wealth (
+    id serial,
+    piggybank_id bigint,
+    change_id bigint
 );
 
-CREATE UNIQUE INDEX ON tirelire (id);
+CREATE UNIQUE INDEX ON piggybank (id);
 
-CREATE UNIQUE INDEX ON monnaie (id);
+CREATE UNIQUE INDEX ON change (id);
 
-ALTER TABLE richesse ADD CONSTRAINT richesse_tirelire_id_fkey FOREIGN KEY (tirelire_id) REFERENCES tirelire(id);
-ALTER TABLE richesse ADD CONSTRAINT richesse_monnaie_id_fkey FOREIGN KEY (monnaie_id) REFERENCES monnaie(id);
+ALTER TABLE wealth ADD CONSTRAINT wealth_piggybank_id_fkey FOREIGN KEY (piggybank_id) REFERENCES piggybank(id);
+ALTER TABLE wealth ADD CONSTRAINT wealth_change_id_fkey FOREIGN KEY (change_id) REFERENCES change(id);
+CREATE INDEX ON wealth ((piggybank_id));
 
-COPY monnaie (kind, value) FROM stdin;
-piece	1
-piece	2
-piece	5
-piece	10
-piece	20
-piece	50
-piece	100
-piece	200
-billet	500
-billet	1000
-billet	2000
-billet	5000
-billet	10000
-billet	20000
-billet	50000
-\.
+\i /sql/changes.sql
+
+\i /sql/data-test.sql

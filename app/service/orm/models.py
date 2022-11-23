@@ -1,38 +1,43 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy.orm import relationship
 
 from service.orm.database import Base
 
 
-class Tirelire(Base):
-    __tablename__ = "tirelire"
+class PiggyBank(Base):
+    __tablename__ = "piggybank"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
     broken = Column(Boolean, default=False, nullable=False)
 
+    wealth = relationship("Wealth")
+
     def __repr__(self):
-        return f"<Tirelire (id={self.id}, name={self.name}, broken={self.broken})>"
+        return f"<PiggyBank (id={self.id}, name={self.name}, broken={self.broken})>"
 
 
-class Monnaie(Base):
-    __tablename__ = "monnaie"
+class Change(Base):
+    __tablename__ = "change"
 
     id = Column(Integer, primary_key=True, index=True)
     kind = Column(String, nullable=False)
     value = Column(Integer)
 
     def __repr__(self):
-        return f"<Monnaie (id={self.id}, kind={self.kind}, value={self.value})>"
+        return f"<Change (id={self.id}, kind={self.kind}, value={self.value})>"
 
 
-class Richesse(Base):
-    __tablename__ = "richesse"
+class Wealth(Base):
+    __tablename__ = "wealth"
 
-    tirelire_id = Column(Integer, ForeignKey("tirelire.id"), nullable=False)
-    monnaie_id = Column(Integer, ForeignKey("monnaie.id"), nullable=False)
-    count = Column(Integer, nullable=False)
+    id = Column(Integer, primary_key=True, index=True)
+    piggybank_id = Column(Integer, ForeignKey("piggybank.id"), nullable=False)
+    change_id = Column(Integer, ForeignKey("change.id"), nullable=False)
 
-    __mapper_args__ = {"primary_key": [tirelire_id, monnaie_id]}
+    change = relationship("Change")
 
     def __repr__(self):
-        return f"<Richesse (tirelire_id={self.tirelire_id}, monnaie_id={self.monnaie_id}, count={self.count})>"
+        return (
+            f"<Wealth (piggybank_id={self.piggybank_id}, change_id={self.change_id})>"
+        )

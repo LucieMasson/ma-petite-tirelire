@@ -1,5 +1,4 @@
 Django
 djangorestframework
-pydantic
 sqlalchemy
 psycopg2

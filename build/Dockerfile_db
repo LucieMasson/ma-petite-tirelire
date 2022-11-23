@@ -3,3 +3,5 @@ FROM postgres:14
 ENV POSTGRES_PASSWORD="1321"
 
 COPY ./build/init_db.sql /docker-entrypoint-initdb.d/
+COPY ./build/changes.sql /sql/
+COPY ./build/data-test.sql /sql/
